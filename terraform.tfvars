@@ -1,3 +1,3 @@
-project_name = "vyracare-app-shell"
+project_name = "vyracare-app-dashboard-mfe"
 region       = "us-east-1"
-cloudfront_comment = "Vyra Care Shell em Angular CloudFront"
+cloudfront_comment = "Vyra Care Dashboard em Angular CloudFront"

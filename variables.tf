@@ -1,7 +1,7 @@
 variable "project_name" {
   type        = string
-  description = "Vyracare Shell"
-  default     = "vyracare-app-shell"
+  description = "Vyracare Dashboard"
+  default     = "vyracare-app-dashboard-mfe"
 }
 
 variable "region" {
@@ -12,5 +12,5 @@ variable "region" {
 
 variable "cloudfront_comment" {
   type        = string
-  default     = "CloudFront Distribution for Angular Shell"
+  default     = "CloudFront Distribution for Angular Dashboard"
 }

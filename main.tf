@@ -3,14 +3,14 @@ provider "aws" {
 }
 
 # Bucket S3 privado
-resource "aws_s3_bucket" "vyracareshell_bucket" {
+resource "aws_s3_bucket" "vyracaredashboard_bucket" {
   bucket        = var.project_name
   force_destroy = true
 }
 
 # Configuração SPA (index.html para Angular)
-resource "aws_s3_bucket_website_configuration" "vyracareshell_bucket_website" {
-  bucket = aws_s3_bucket.vyracareshell_bucket.id
+resource "aws_s3_bucket_website_configuration" "vyracaredashboard_bucket_website" {
+  bucket = aws_s3_bucket.vyracaredashboard_bucket.id
 
   index_document {
     suffix = "index.html"
@@ -27,8 +27,8 @@ resource "aws_cloudfront_origin_access_identity" "oai" {
 }
 
 # Política de bucket para permitir CloudFront acessar objetos
-resource "aws_s3_bucket_policy" "vyracareshell_bucket_policy" {
-  bucket = aws_s3_bucket.vyracareshell_bucket.id
+resource "aws_s3_bucket_policy" "vyracaredashboard_bucket_policy" {
+  bucket = aws_s3_bucket.vyracaredashboard_bucket.id
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -39,17 +39,17 @@ resource "aws_s3_bucket_policy" "vyracareshell_bucket_policy" {
           AWS = aws_cloudfront_origin_access_identity.oai.iam_arn
         },
         Action   = "s3:GetObject",
-        Resource = "${aws_s3_bucket.vyracareshell_bucket.arn}/*"
+        Resource = "${aws_s3_bucket.vyracaredashboard_bucket.arn}/*"
       }
     ]
   })
 }
 
 # CloudFront Distribution
-resource "aws_cloudfront_distribution" "vyracareshell_distribution" {
+resource "aws_cloudfront_distribution" "vyracaredashboard_distribution" {
   origin {
-    domain_name = aws_s3_bucket.vyracareshell_bucket.bucket_regional_domain_name
-    origin_id   = "S3-vyracare-app-shell"
+    domain_name = aws_s3_bucket.vyracaredashboard_bucket.bucket_regional_domain_name
+    origin_id   = "S3-vyracare-app-dashboard-mfe"
 
     s3_origin_config {
       origin_access_identity = "origin-access-identity/cloudfront/${aws_cloudfront_origin_access_identity.oai.id}"
@@ -62,7 +62,7 @@ resource "aws_cloudfront_distribution" "vyracareshell_distribution" {
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "S3-vyracare-app-shell"
+    target_origin_id       = "S3-vyracare-app-dashboard-mfe"
     viewer_protocol_policy = "redirect-to-https"
 
     forwarded_values {
